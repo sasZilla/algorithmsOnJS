@@ -224,48 +224,48 @@ export class BST {
     }
   }
 }
+// 
+// let bst = new BST();
+// bst.add(1);
+// bst.add(3);
+// bst.add(5);
+// bst.add(2);
+// bst.add(1);
+// console.log(
+//   'Min: ', bst.findMin(),
+//   'Max: ', bst.findMax(),
+//   'Find: ', bst.find(5),
+//   'isPresent: ', bst.isPresent(5)
+// )
+//
+// bst.remove(5);
+// console.log(
+//   'Min: ', bst.findMin(),
+//   'Max: ', bst.findMax(),
+//   'Find: ', bst.find(5),
+//   'isPresent: ', bst.isPresent(5)
+// )
 
-let bst = new BST();
-bst.add(1);
-bst.add(3);
-bst.add(5);
-bst.add(2);
-bst.add(1);
-console.log(
-  'Min: ', bst.findMin(),
-  'Max: ', bst.findMax(),
-  'Find: ', bst.find(5),
-  'isPresent: ', bst.isPresent(5)
-)
 
-bst.remove(5);
-console.log(
-  'Min: ', bst.findMin(),
-  'Max: ', bst.findMax(),
-  'Find: ', bst.find(5),
-  'isPresent: ', bst.isPresent(5)
-)
-
-
-const bst2 = new BST();
-
-bst2.add(9);
-bst2.add(4);
-bst2.add(17);
-bst2.add(3);
-bst2.add(6);
-bst2.add(22);
-bst2.add(5);
-bst2.add(7);
-bst2.add(20);
-console.log(bst2.findMinHeight());
-console.log(bst2.findMaxHeight());
-console.log("isBalanced", bst2.isBalanced());
-bst2.add(10);
-console.log(bst2.findMinHeight());
-console.log(bst2.findMaxHeight());
-console.log(bst2.isBalanced());
-console.log("inOrder"); bst2.inOrder();
-console.log("preOrder"); bst2.preOrder();
-console.log("postOrder"); bst2.postOrder();
-console.log("levelOrder"); bst2.levelOrder();
+// const bst2 = new BST();
+//
+// bst2.add(9);
+// bst2.add(4);
+// bst2.add(17);
+// bst2.add(3);
+// bst2.add(6);
+// bst2.add(22);
+// bst2.add(5);
+// bst2.add(7);
+// bst2.add(20);
+// console.log(bst2.findMinHeight());
+// console.log(bst2.findMaxHeight());
+// console.log("isBalanced", bst2.isBalanced());
+// bst2.add(10);
+// console.log(bst2.findMinHeight());
+// console.log(bst2.findMaxHeight());
+// console.log(bst2.isBalanced());
+// console.log("inOrder"); bst2.inOrder();
+// console.log("preOrder"); bst2.preOrder();
+// console.log("postOrder"); bst2.postOrder();
+// console.log("levelOrder"); bst2.levelOrder();

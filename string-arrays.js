@@ -29,10 +29,10 @@ export function reverseString(str) {
   let left = 0;
   let right = strList.length - 1;
 
-  function swap(arr, left, right) {
-    let store = arr[left];
-    arr[left] = arr[right];
-    arr[right] = store;
+  function swap(arr, i, j) {
+    let store = arr[i];
+    arr[i] = arr[j];
+    arr[j] = store;
   }
 
   function isAlphabet(sym) {
@@ -46,6 +46,8 @@ export function reverseString(str) {
       right--;
     } else {
       swap(strList, left, right);
+      left++;
+      right--;
     }
   }
 
@@ -53,9 +55,10 @@ export function reverseString(str) {
 }
 
 export function reverseStringWithoutArray(str) {
-  for (let i=0,l=str.length;i<l;i++) {
-      let copy = str.charAt(i);
-      str[i] = str.charAt(l - i - 1);
+  const l = str.length;
+  for (let i=0;i<l;i++) {
+      let copy = str[i];
+      str[i] = str[l - i - 1];
       str[l - i - 1] = copy;
   }
   return str;
@@ -64,8 +67,6 @@ export function reverseStringWithoutArray(str) {
 export function isPalindrom(str) {
   return str === reverseString(str);
 }
-
-
 
 /*
 Given a string, print all possible palindromic partitions
@@ -87,8 +88,9 @@ Memory Complexity O(N)
 function printAllPalindrom(str) {
   let maxLength = 0;
   let allPalindroms = [];
+  const l = str.length;
 
-  for (let i=1,l=str.length;i<l;i++) {
+  for (let i=1;i<l;i++) {
     let low = i - 1;
     let high = i;
     while (low > 0 && high < l && str.charAt(low) === str.charAt(high)) {
@@ -172,26 +174,28 @@ function countTriplesOn3(arr, sum) {
 }
 
 export function countTriplesOn2(arr, sum) {
+  const l = arr.length;
+
   // 1. Initialize result as 0
   let triplesCount = 0;
 
   // 2. sort array O(N*logN)
-  srr.sort()
+  arr.sort((a,b) => a-b);
 
   // 3. run loop from i=0 to N-3
-  for (let i=0,l=arr.length;i<l-2;i++) {
+  for (let i=0;i<l-2;i++) {
     // Initialize left=i+1 right=N-1
     let left = i + 1;
     let right = l - 1;
     // Move left and right toward until they meet
     while (left < right) {
       // Decrement right if sum of trible less than sum
-      if (arr[left] + arr[right] >= sum - arr[i]) {
+      if (arr[left] + arr[right] + arr[i] >= sum) {
         right--;
 
       // for current i and left we have only right - left triples
       } else {
-        triplesCount += right - left;
+        triplesCount += (right - left);
         left++;
       }
     }
@@ -219,7 +223,7 @@ export function countCouplesOnLogN(a, sum) {
   let i = 0;
   let j = a.length - 1;
 
-  a.sort();
+  a.sort((a,b) => a-b);
 
   while (i < j) {
     if (a[i] + a[j] >= sum) {
@@ -244,97 +248,111 @@ export function countCouplesOnLogN(a, sum) {
 
   Input:  arr[] =  {1, 4, 3, 2}
   Output: arr[] =  {1, 4, 2, 3}
+================================================================================
+1. O(N*LogN)
+  1) sort Array
+  2) keep A[0], switch A[1] and A[2]
+  3) switch A[3] and A[4] ...
+
+2. O(N)
+  1) Initialize indicator to check ZigZag value was more/less
+    start with < (indicator === false)
+  2) Compare two item A[i] and A[i+1]
+    !indicator => A[i] should be < then A[i+1]
+    indicator => A[i] should be > then A[i+1]
+  3) swap element regarding to condition
 */
 
-// function zigZagFashion(arr) {
-//   // < arr[i] > arr[i+1] < arr[i+2] >
-//   var indicator = false; //< == 0, > == 1
-//   for (var i=0;i<arr.length-1;i++) {
-//     if ((arr[i] > arr[i+1] && indicator === false) || (arr[i] < arr[i+1] && indicator === true)) {
-//       var copy = arr[i];
-//       arr[i] = arr[i+1];
-//       arr[i+1] = copy; // do not forget, that this is "COPY", because arr[i] has already rewrited
-//     }
-//     indicator = !indicator;
-//   }
-//   return arr;
-// }
-//
-//
-// arr1 = [4, 3, 7, 8, 6, 2, 1]
-// arr2 = [1, 4, 3, 2]
-//
-// console.log( '[4, 3, 7, 8, 6, 2, 1] -> [3, 7, 4, 8, 2, 6, 1]', zigZagFashion(arr1).toString() === [3, 7, 4, 8, 2, 6, 1].toString(), zigZagFashion(arr1))
-// console.log( '[1, 4, 3, 2] -> [1, 4, 2, 3]', zigZagFashion(arr2).toString() === [1, 4, 2, 3].toString(), zigZagFashion(arr2) )
-//
-// console.log('#########################################################################################################');
-// console.log('###', 'Generate all possible sorted arrays from alternate elements of two given sorted arrays', '###');
-// console.log('#########################################################################################################');
-//
-// /*
-//   Generate all possible sorted arrays from alternate elements of two given sorted arrays
-//   Given two sorted arrays A and B, generate all possible arrays such that
-//   first element is taken from A then from B then from A and so on
-//   in increasing order till the arrays exhausted.
-//   The generated arrays should end with an element from B.
-//
-//   For Example
-//   A = {10, 15, 25}
-//   B = {1, 5, 20, 30}
-//
-//   The resulting arrays are:
-//     10 20
-//     10 20 25 30
-//     10 30
-//     15 20
-//     15 20 25 30
-//     15 30
-//     25 30
-// */
-//
-// function generaUtil(a,b,c,k,j,m,n,len,flag) {
-//   // flag - means we stay on 'a' array
-//   if (flag) {
-//     if (len) {
-//       console.log('======Start========')
-//       console.log( c.slice(0,len+1).toString() );
-//       console.log('======End========')
-//
-//     }
-//
-//     for (var i = k; i < m; i++) {
-//
-//       // for first case
-//       if (!len) {
-//         c[len] = a[i];
-//
-//         // don't increment lem as B is included yet
-//         generaUtil(a,b,c,i+1,j,m,n,len,!flag);
-//       } else {
-//         if (a[i] > c[len]) {
-//           c[len+1] = a[i];
-//           generaUtil(a,b,c,i+1,j,m,n,len+1,!flag);
-//         }
-//       }
-//     }
-//   } else {
-//     for (var i = j; i < n; i++) {
-//       if (b[i] > c[len]) {
-//         c[len+1] = b[i];
-//         generaUtil(a,b,c,k,i+1,m,n,len+1,!flag);
-//       }
-//     }
-//   }
-// }
-//
-// function generate(a, b) {
-//   var c = [],
-//     k=0,j=0,
-//     m=a.length,n=b.length,
-//     len = 0,
-//     flag = true;
-//   generaUtil(a,b,c,k,j,m,n,len,flag);
-// }
+export function zigZagFunction(arr) {
+  if (!arr || !arr.length || arr.length <= 2) return arr;
+
+  function swap(a, i, j) {
+    let store = a[i];
+    a[i] = a[j];
+    a[j] = store;
+  }
+
+  let signIndicator = true;
+  const l = arr.length;
+  for (let i=0;i<l-1;i++) {
+    if (signIndicator) {
+      if (arr[i] > arr[i+1]) {
+        swap(arr, i, i+1);
+      }
+    } else {
+      if (arr[i] < arr[i+1]) {
+        swap(arr, i, i+1);
+      }
+    }
+    signIndicator = !signIndicator;
+  }
+  return arr;
+}
+
+/*
+  Generate all possible sorted arrays from alternate elements of two given sorted arrays
+  Given two sorted arrays A and B, generate all possible arrays such that
+  first element is taken from A then from B then from A and so on
+  in increasing order till the arrays exhausted.
+  The generated arrays should end with an element from B.
+
+  For Example
+  A = {10, 15, 25}
+  B = {1, 5, 20, 30}
+
+  The resulting arrays are:
+    10 20
+    10 20 25 30
+    10 30
+    15 20
+    15 20 25 30
+    15 30
+    25 30
+================================================================================
+*/
+
+function generaUtil(a,b,c,k,j,m,n,len,flag) {
+  // flag - means we stay on 'a' array
+  if (flag) {
+    if (len) {
+      console.log('======Start========')
+      console.log( c.slice(0,len+1).toString() );
+      console.log('======End========')
+    }
+
+    for (var i = k; i < m; i++) {
+
+      // for first case
+      if (!len) {
+        c[len] = a[i];
+
+        // don't increment lem as B is included yet
+        generaUtil(a,b,c,i+1,j,m,n,len,!flag);
+      } else {
+        if (a[i] > c[len]) {
+          c[len+1] = a[i];
+          generaUtil(a,b,c,i+1,j,m,n,len+1,!flag);
+        }
+      }
+    }
+  } else {
+    for (var i = j; i < n; i++) {
+      if (b[i] > c[len]) {
+        c[len+1] = b[i];
+        generaUtil(a,b,c,k,i+1,m,n,len+1,!flag);
+      }
+    }
+  }
+}
+
+function generate(a, b) {
+  var c = [],
+    k=0,j=0,
+    m=a.length,n=b.length,
+    len = 0,
+    flag = true;
+  generaUtil(a,b,c,k,j,m,n,len,flag);
+}
 //
 //
 // arr1 = [10, 15, 25]
@@ -343,126 +361,84 @@ export function countCouplesOnLogN(a, sum) {
 // console.log( '[10, 15, 25], [1, 5, 20, 30]')
 // generate(arr1, arr2);
 // // throw new Error("Something went badly wrong!");
-//
-//
-// console.log('################################################');
-// console.log('###', 'Pythagorean Triplet in an array', '###');
-// console.log('################################################');
-//
-// /*
-//   Pythagorean Triplet in an array
-//   Given an array of integers, write a function that returns true
-//   if there is a triplet (a, b, c) that satisfies a2 + b2 = c2.
-//
-//   Example:
-//
-//   Input: arr[] = {3, 1, 4, 6, 5}
-//   Output: True
-//   There is a Pythagorean triplet (3, 4, 5).
-//
-//   Input: arr[] = {10, 4, 6, 12, 5}
-//   Output: False
-//   There is no Pythagorean triplet.
-// */
-//
-// function pythagoreanTripletOn3(a) {
-//   for (var i = 0; i < a.length-2; i++) {
-//     for (var j = i+1; j < a.length-1; j++) {
-//       for (var k = j+1; k < a.length; k++) {
-//         var a2 = a[i]*a[i],
-//           b2 = a[j]*a[j],
-//           c2 = a[k]*a[k];
-//         if (a2 + b2 === c2) {
-//           return true;
-//         }
-//       }
-//     }
-//   }
-//   return false;
-// }
-//
-// /*
-//   We can solve this in O(n2) time by sorting the array first.
-//
-//   1) Do square of every element in input array. This step takes O(n) time.
-//   2) Sort the squared array in increasing order. This step takes O(nLogn) time.
-//   3) To find a triplet (a, b, c) such that a = b + c, do following.
-//     * Fix ‘a’ as last element of sorted array.
-//     * Now search for pair (b, c) in subarray between first element and ‘a’.
-//       A pair (b, c) with given sum can be found in O(n)
-//     * If no pair found for current ‘a’, then move ‘a’ one position back and repeat step 3.2.
-// */
-// function pythagoreanTripletOn2(a) {
-//   for (var i = 0; i < a.length; i++) {
-//     a[i] = a[i]*a[i];
-//   }
-//   a.sort(function(a,b){return a>b;});
-//   // now check a + b = c
-//   // c - last element
-//   // O(n2) - cicle in cicle
-//
-//   var len = a.length;
-//   for (var i = len - 1; i > 1; i--) {
-//     var c = a[i];
-//
-//     var j = 0,
-//       k = i - 1;
-//     while (j < k) {
-//       var a1 = a[j],
-//         b = a[k];
-//
-//       if (a1 + b === c) {
-//         return true;
-//       }
-//
-//       if (a1 + b > c) {
-//         k--;
-//       } else {
-//         j++;
-//       }
-//     }
-//   }
-//   return false;
-// }
-//
-//
-// arr1 = [3, 1, 4, 6, 5]
-// arr2 = [10, 4, 6, 12, 5]
-//
-// console.log( '[3, 1, 4, 6, 5]', pythagoreanTripletOn3(arr1) === true)
-// console.log( '[10, 4, 6, 12, 5]', pythagoreanTripletOn3(arr2) === false)
-//
-// console.log( '[3, 1, 4, 6, 5]', pythagoreanTripletOn2(arr1) === true)
-// console.log( '[10, 4, 6, 12, 5]', pythagoreanTripletOn2(arr2) === false)
-//
-//
-// console.log('################################################');
-// console.log('###', 'Length of the largest subarray with contiguous elements', '###');
-// console.log('################################################');
-//
-// /*
-//   Length of the largest subarray with contiguous elements
-//   Given an array of distinct integers, find length of the longest subarray
-//   which contains numbers that can be arranged in a continuous sequence.
-//
-//   Examples:
-//
-//   Input:  arr[] = {10, 12, 11};
-//   Output: Length of the longest contiguous subarray is 3
-//
-//   Input:  arr[] = {14, 12, 11, 20};
-//   Output: Length of the longest contiguous subarray is 2
-//
-//   Input:  arr[] = {1, 56, 58, 57, 90, 92, 94, 93, 91, 45};
-//   Output: Length of the longest contiguous subarray is 5
-// */
+
+/*
+  Pythagorean Triplet in an array
+  Given an array of integers, write a function that returns true
+  if there is a triplet (a, b, c) that satisfies a2 + b2 = c2.
+
+  Example:
+
+  Input: arr[] = {3, 1, 4, 6, 5}
+  Output: True
+  There is a Pythagorean triplet (3, 4, 5).
+
+  Input: arr[] = {10, 4, 6, 12, 5}
+  Output: False
+  There is no Pythagorean triplet.
+==================================
+1. Bruteforce solution O(N^3)
+  Run 3 loops and check if a[i]^2 + a[j]^2 === a[k]^2
+2. Efficient solution O(N^2)
+  1) Make each element in array as square element O(N)
+  2) Sort array O(N*LogN)
+  3) Now we need to find a,b,c as a + b = c
+    I) Mark element c as a[n-1]
+    II) find pair in subarray (a,b) as a + b === c O(N)
+      - Use hash table with compliments as h[c - a] = a
+      - Or a as first index, b as last index and move elements toward together
+        until meet
+    III) if not found reduce index of c as a[n-2]
+    IV) repeat until c index > 1 a[2] - last index for c
+*/
+
+export function pythagoreanTripletOn2(arr) {
+  if (!arr || !arr.length || arr.length < 3) return false;
+
+  arr.map((el, i) => arr[i] = Math.pow(el, 2));
+  arr.sort((a,b) => a-b);
+
+  for (let i=arr.length-1;i>1;i--) {
+    let c = arr[i];
+    let j = 0;
+    let k = i-1;
+    while (j < k) {
+      let sum = arr[j] + arr[k];
+      if (sum > c) {
+        k--;
+      } else if (sum < c) {
+        j++;
+      } else {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+/*
+  Length of the largest subarray with contiguous elements
+  Given an array of distinct integers, find length of the longest subarray
+  which contains numbers that can be arranged in a continuous sequence.
+
+  Examples:
+
+  Input:  arr[] = {10, 12, 11};
+  Output: Length of the longest contiguous subarray is 3
+
+  Input:  arr[] = {14, 12, 11, 20};
+  Output: Length of the longest contiguous subarray is 2
+
+  Input:  arr[] = {1, 56, 58, 57, 90, 92, 94, 93, 91, 45};
+  Output: Length of the longest contiguous subarray is 5
+*/
 //
 // function findLongestSubarrayLength(arr) {
 //   if (arr.length < 2) {
 //     return arr.length;
 //   }
 //
-//   arr.sort(function(a,b) {return a>b;});
+//   arr.sort(function(a,b) {return a-b;});
 //
 //   var max = 1,
 //     currMax = 1,
