@@ -431,252 +431,256 @@ export function pythagoreanTripletOn2(arr) {
 
   Input:  arr[] = {1, 56, 58, 57, 90, 92, 94, 93, 91, 45};
   Output: Length of the longest contiguous subarray is 5
+======================================================================
+1. BruteForce solution O(N^3)
+  - init maxLength = 0
+  - get first element
+  - currLength = 0
+  - while find element + 1
+    element = element + 1
+    currLength++;
+    maxLength = Math.max(maxLength, )
+  - repeat with next index until end of array
+  - return maxLength
+
+2. Efficient Using Sort O(N*LogN)
+  - sort array
+  - init maxLength = 0
+  - init currLength = 1
+  - run loop from i=1 to n
+    if a[i] > a[i-1]: currLength++;
+    else: currLength = 1;
+    maxLength = Math.max(maxLength, currLength);
+  - return maxLength
+
+3. Get Max, Min and run through the range O(N^2)
 */
-//
-// function findLongestSubarrayLength(arr) {
-//   if (arr.length < 2) {
-//     return arr.length;
-//   }
-//
-//   arr.sort(function(a,b) {return a-b;});
-//
-//   var max = 1,
-//     currMax = 1,
-//     prev = arr[0];
-//   for (var i = 1; i < arr.length; i++) {
-//     var curr = arr[i];
-//     if (curr - prev === 1) {
-//       currMax++;
-//     } else {
-//       currMax = 1;
-//     }
-//
-//     prev = curr;
-//
-//     if (max < currMax) {
-//       max = currMax;
-//     }
-//   }
-//
-//   return max;
-// }
-//
-//
-// arr1 = [10, 12, 11];
-// arr2 = [14, 12, 11, 20];
-// arr3 = [1, 56, 58, 57, 90, 92, 94, 93, 91, 45];
-//
-// console.log( '[10, 12, 11]', findLongestSubarrayLength(arr1) === 3)
-// console.log( '[14, 12, 11, 20]', findLongestSubarrayLength(arr2) === 2)
-// console.log( '[1, 56, 58, 57, 90, 92, 94, 93, 91, 45]', findLongestSubarrayLength(arr3) === 5)
-//
-//
-//
-// console.log('########################################################################################################################');
-// console.log('###', 'Find the smallest positive integer value that cannot be represented as sum of any subset of a given array', '###');
-// console.log('########################################################################################################################');
-//
-// /*
-//   Find the smallest positive integer value that cannot be represented
-//   as sum of any subset of a given array
-//   Given a sorted array (sorted in non-decreasing order) of positive numbers,
-//   find the smallest positive integer value that cannot be represented
-//   as sum of elements of any subset of given set.
-//   Expected time complexity is O(n).
-//
-//   Examples:
-//
-//   Input:  arr[] = {1, 3, 6, 10, 11, 15};
-//   Output: 2
-//
-//   Input:  arr[] = {1, 1, 1, 1};
-//   Output: 5
-//
-//   Input:  arr[] = {1, 1, 3, 4};
-//   Output: 10
-//
-//   Input:  arr[] = {1, 2, 5, 10, 20, 40};
-//   Output: 4
-//
-//   Input:  arr[] = {1, 2, 3, 4, 5, 6};
-//   Output: 22
-// */
-//
-// /*
-//   We can solve this problem in O(n) time using a simple loop. Let the input array be arr[0..n-1].
-//   We initialize the result as 1 (smallest possible outcome) and traverse the given array.
-//   Let the smallest element that cannot be represented by elements at indexes from 0 to (i-1) be ‘res’,
-//   there are following two possibilities when we consider element at index i:
-//
-//   1) We decide that ‘res’ is the final result: If arr[i] is greater than ‘res’,
-//   then we found the gap which is ‘res’ because the elements after arr[i] are also going to be greater than ‘res’.
-//
-//   2) The value of ‘res’ is incremented after considering arr[i]: The value of ‘res’ is incremented by arr[i]
-//   (why? If elements from 0 to (i-1) can represent 1 to ‘res-1’,
-//   then elements from 0 to i can represent from 1 to ‘res + arr[i] – 1’
-//   be adding ‘arr[i]’ to all subsets that represent 1 to ‘res’)
-// */
-// function findSmallestInteger(arr) {
-//   var sum = 1;
-//   // sum should be greate then arr[i]
-//   // when arr[i] > sum - it means we have a gap
-//   for (var i = 0; i < arr.length && sum >= arr[i]; i++) {
-//     sum += arr[i];
-//   }
-//   return sum;
-// }
-//
-// arr1 = [1, 3, 6, 10, 11, 15];
-// arr2 = [1, 1, 1, 1];
-// arr3 = [1, 2, 5, 10, 20, 40];
-// arr4 = [1, 2, 3, 4, 5, 6];
-// arr5 = [1, 1, 3, 4];
-//
-// console.log( '[1, 3, 6, 10, 11, 15]', findSmallestInteger(arr1) === 2, findSmallestInteger(arr1))
-// console.log( '[1, 1, 1, 1]', findSmallestInteger(arr2) === 5, findSmallestInteger(arr2))
-// console.log( '[1, 2, 5, 10, 20, 40]', findSmallestInteger(arr3) === 4, findSmallestInteger(arr3))
-// console.log( '[1, 2, 3, 4, 5,46]', findSmallestInteger(arr4) === 22, findSmallestInteger(arr4))
-// console.log( '[1, 1, 3, 4]', findSmallestInteger(arr5) === 10, findSmallestInteger(arr5))
-//
-//
-//
-// console.log('########################################################################################################################');
-// console.log('###', 'Find the smallest subarray with sum greater than the given value.', '###');
-// console.log('########################################################################################################################');
-//
-// /*
-//   Smallest subarray with sum greater than a given value
-//   Given an array of integers and a number x, find the smallest subarray with sum greater than the given value.
-//
-//   Examples:
-//   arr[] = {1, 4, 45, 6, 0, 19}
-//      x  =  51
-//   Output: 3
-//   Minimum length subarray is {4, 45, 6}
-//
-//   arr[] = {1, 10, 5, 2, 7}
-//      x  = 9
-//   Output: 1
-//   Minimum length subarray is {10}
-//
-//   arr[] = {1, 11, 100, 1, 0, 200, 3, 2, 1, 250}
-//       x = 280
-//   Output: 4
-//   Minimum length subarray is {100, 1, 0, 200}
-// */
-//
-// function findSmallestSubarrayOn2(arr, num) {
-//   var sum = 0,
-//     j,
-//     storage = [];
-//
-//   for (var i = 0; i < arr.length; i++) {
-//     j = i + 1;
-//     sum = arr[i];
-//     while (j < arr.length && sum <= num) {
-//       sum += arr[j];
-//       j++;
-//     }
-//     if (sum > num) {
-//       storage.push(j - i); // start element
-//     }
-//   }
-//   return Math.min.apply(null, storage);
-// }
-//
-// function findSmallestSubarrayOn2V2(arr, num) {
-//   var sum = 0,
-//     minLen = arr.length+1;
-//
-//   for (var start = 0; start < arr.length; start++) {
-//     sum = arr[start];
-//
-//     if (sum > num) {
-//       return 1;
-//     }
-//
-//     for (var end = start+1; end < arr.length; end++) {
-//       sum += arr[end];
-//
-//       // If sum becomes more than x and length of
-//       // this subarray is smaller than current smallest
-//       // length, update the smallest length (or result)
-//       //  + 1 we need to get real length of subarray
-//       if (sum > num && ((end - start + 1) < minLen)) {
-//         minLen = end - start + 1;
-//       }
-//     }
-//   }
-//   return minLen;
-// }
-//
-// function findSmallestSubarrayOn1(arr, sum) {
-//   var len = arr.length,
-//     currSum = 0,
-//     start = 0, end = 0,
-//     minLen = len+1; // when search for min, before set min as max;
-//
-//   while (end < len) {
-//
-//     // first we set currSum as sum
-//     while (currSum <= sum && end < len) {
-//       currSum = currSum + arr[end];
-//       end++;
-//     }
-//
-//     // then we check if we can cut leng of subarray
-//     // checking first elements if we can remove it
-//     while (currSum > sum && start < len) {
-//       if (minLen > end - start) {
-//         minLen = end - start;
-//       }
-//
-//       currSum = currSum - arr[start];
-//       start++;
-//     }
-//   }
-//   return minLen;
-// }
-//
-// arr1 = [1, 4, 45, 6, 0, 19];
-// arr2 = [1, 10, 5, 2, 7];
-// arr3 = [1, 11, 100, 1, 0, 200, 3, 2, 1, 250];
-// arr4 = [1, 2, 3, 4, 5, 6];
-// arr5 = [1, 1, 3, 4];
-//
-// console.log( arr1.join(', '), ': ', findSmallestSubarrayOn2(arr1, 51) === 3)
-// console.log( arr2.join(', '), ': ', findSmallestSubarrayOn2(arr2, 9) === 1)
-// console.log( arr3.join(', '), ': ', findSmallestSubarrayOn2(arr3, 280) === 4)
-//
-// console.log( arr1.join(', '), ': ', findSmallestSubarrayOn2V2(arr1, 51) === 3)
-// console.log( arr2.join(', '), ': ', findSmallestSubarrayOn2V2(arr2, 9) === 1)
-// console.log( arr3.join(', '), ': ', findSmallestSubarrayOn2V2(arr3, 280) === 4)
-//
-//
-// console.log( arr1.join(', '), ': ', findSmallestSubarrayOn1(arr1, 51) === 3, findSmallestSubarrayOn1(arr1, 51))
-// console.log( arr2.join(', '), ': ', findSmallestSubarrayOn1(arr2, 9) === 1, findSmallestSubarrayOn1(arr2, 9))
-// console.log( arr3.join(', '), ': ', findSmallestSubarrayOn1(arr3, 280) === 4)
-//
-//
-// console.log('#########################################');
-// console.log('###', 'Find subarray with given sum', '###');
-// console.log('#########################################');
-//
-// /*
-//   Find subarray with given sum | Set 1 (Nonnegative Numbers)
-//   Given an unsorted array of nonnegative integers, find a continous subarray which adds to a given number.
-//
-//   Examples:
-//
-//   Input: arr[] = {1, 4, 20, 3, 10, 5}, sum = 33
-//   Ouptut: Sum found between indexes 2 and 4
-//
-//   Input: arr[] = {1, 4, 0, 0, 3, 10, 5}, sum = 7
-//   Ouptut: Sum found between indexes 1 and 4
-//
-//   Input: arr[] = {1, 4}, sum = 0
-//   Output: No subarray found
-// */
+
+export function findLongestSubarrayLength(arr) {
+  if (!arr || !arr.length) return 0;
+  if (arr.length === 1) return 1;
+
+  arr.sort((a,b) => a-b);
+
+  const len = arr.length;
+  let maxLength = 0;
+  let currLength = 1;
+  for (let i=1;i<len;i++) {
+    if (arr[i] - arr[i-1] === 1) {
+      currLength++;
+    } else {
+      currLength = 1;
+    }
+    maxLength = Math.max(maxLength, currLength);
+  }
+  return maxLength;
+}
+
+/*
+  Find the smallest positive integer value that cannot be represented
+  as sum of any subset of a given array
+  Given a sorted array (sorted in non-decreasing order) of positive numbers,
+  find the smallest positive integer value that cannot be represented
+  as sum of elements of any subset of given set.
+  Expected time complexity is O(n).
+
+  Examples:
+
+  Input:  arr[] = {1, 3, 6, 10, 11, 15};
+  Output: 2
+
+  Input:  arr[] = {1, 1, 1, 1};
+  Output: 5
+
+  Input:  arr[] = {1, 1, 3, 4};
+  Output: 10
+
+  Input:  arr[] = {1, 2, 5, 10, 20, 40};
+  Output: 4
+
+  Input:  arr[] = {1, 2, 3, 4, 5, 6};
+  Output: 22
+===================================
+1. O(N)
+  - Initialize result = 1
+  - Run loop from i=0 to N
+    I) if a[i] <= result: result += a[i]
+      here we try to find gap between presented sum and next big element
+  - return result (Why we can do this?)
+    the idea after we calculate all items or find a gap
+    we just add 1 and it will be min
+*/
+
+export function findSmallestInteger(arr) {
+  if (!arr || !arr.length) return 0;
+
+  let sum = 1;
+  for (let i=0;i<arr.length;i++) {
+    if (arr[i] <= sum) {
+      sum += arr[i];
+    }
+  }
+
+  return sum;
+}
+
+/*
+  Smallest subarray with sum greater than a given value
+  Given an array of integers and a number x, find the smallest subarray with sum greater than the given value.
+
+  Examples:
+  arr[] = {1, 4, 45, 6, 0, 19}
+     x  =  51
+  Output: 3
+  Minimum length subarray is {4, 45, 6}
+
+  arr[] = {1, 10, 5, 2, 7}
+     x  = 9
+  Output: 1
+  Minimum length subarray is {10}
+
+  arr[] = {1, 11, 100, 1, 0, 200, 3, 2, 1, 250}
+      x = 280
+  Output: 4
+  Minimum length subarray is {100, 1, 0, 200}
+==========
+Given:
+  - array of integers (-Infinity ... +Infinity)
+  - number x (-Infinity ... +Infinity)
+  - find smallest subarray with sum > x
+  - what should return? min length
+  - is array sorted? No
+  - Min elements? 1
+  - What will return if not found? []
+  - Subarray shouldn't be a subset it should be sublist
+  - cant sort
+==========
+1. BruteForce solution O(N^2)
+  - Initialize maxLength = 0
+  - initialize currLength = 0
+  - Run loop from i=0 to N-2
+    - currSum = a[i]
+    - curLength = 1
+    - check if currSum > x: return 1 // we don't need to wait it's the minimum possible
+    - Run loop from j=i+1 to N-1
+      currSum += a[j]
+      curLength++
+      - if currSum > x: break;
+    - maxLength = Math.max(maxLength, currLength)
+
+2. Use tricky neseted loops O(N)
+  - Initialize start=end=0, minLen = n
+  - Create first loop while (end < n)
+    - Create initial sum that we'll reduce in future:
+      sum = 0
+      while (sum <= x && end < n):
+        sum += a[end]
+        end++
+
+    - now reduce sum, cutting elements from begining
+      while (sum > x && start < n):
+        if end - start < minLen: minLen = end - start
+        sum -= a[start]
+        start++
+  - return minLen
+*/
+
+export function findSmallestSubarray(arr, target) {
+  if (!arr || !arr.length) return 0;
+
+  let start = 0;
+  let end = 0;
+  let len = arr.length
+  let minLen = len;
+
+  while (end < len) {
+    let sum = 0;
+    while (sum <= target && end < len) {
+      sum += arr[end];
+      end++;
+    }
+
+    while (start < end && sum > target) {
+      if (minLen > end - start) {
+        minLen = end - start;
+      }
+      sum -= arr[start];
+      start++;
+    }
+  }
+
+  return minLen;
+}
+
+function findSmallestSubarrayOn2(arr, num) {
+  var sum = 0,
+    j,
+    storage = [];
+
+  for (var i = 0; i < arr.length; i++) {
+    j = i + 1;
+    sum = arr[i];
+    while (j < arr.length && sum <= num) {
+      sum += arr[j];
+      j++;
+    }
+    if (sum > num) {
+      storage.push(j - i); // start element
+    }
+  }
+  return Math.min.apply(null, storage);
+}
+
+function findSmallestSubarrayOn2V2(arr, num) {
+  var sum = 0,
+    minLen = arr.length+1;
+
+  for (var start = 0; start < arr.length; start++) {
+    sum = arr[start];
+
+    if (sum > num) {
+      return 1;
+    }
+
+    for (var end = start+1; end < arr.length; end++) {
+      sum += arr[end];
+
+      // If sum becomes more than x and length of
+      // this subarray is smaller than current smallest
+      // length, update the smallest length (or result)
+      //  + 1 we need to get real length of subarray
+      if (sum > num && ((end - start + 1) < minLen)) {
+        minLen = end - start + 1;
+      }
+    }
+  }
+  return minLen;
+}
+
+/*
+  Find subarray with given sum | Set 1 (Nonnegative Numbers)
+  Given an unsorted array of nonnegative integers, find a continous subarray which adds to a given number.
+
+  Examples:
+
+  Input: arr[] = {1, 4, 20, 3, 10, 5}, sum = 33
+  Ouptut: Sum found between indexes 2 and 4
+
+  Input: arr[] = {1, 4, 0, 0, 3, 10, 5}, sum = 7
+  Ouptut: Sum found between indexes 1 and 4
+
+  Input: arr[] = {1, 4}, sum = 0
+  Output: No subarray found
+==========
+Given:
+  - Target SUM
+  - UNSORTED array
+  - Array contains ONLY nonnegative integers
+  - find ANY continous subarray that's add to given sum
+  - Output should be "Sum found between indexes 1 and 4" or "No subarray found"
+===========
+1.
+*/
 //
 // function findSubarryWithGivenSumV1(arr, sum) {
 //   var currSum = 0;
