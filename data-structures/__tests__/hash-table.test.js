@@ -1,4 +1,4 @@
-import { HashTable } from '../data-structures/hash-table';
+import { HashTable } from '../hash-table';
 
 test("HashTable should exist 'lion'", () => {
   let ht = new HashTable();

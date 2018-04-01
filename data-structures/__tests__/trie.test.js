@@ -1,4 +1,4 @@
-import { Trie } from '../data-structures/trie';
+import { Trie } from '../trie';
 
 test("Trie should keem supply only words: MANY MY LIE A", () => {
   let trie = new Trie();
