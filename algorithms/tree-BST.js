@@ -238,3 +238,54 @@ export function checkWhetherBinaryTreeIsFull(root) {
   }
   return true;
 }
+
+/*
+  Reverse alternate levels of a perfect binary tree
+  Given a Perfect Binary Tree, reverse the alternate level nodes of the binary tree.
+
+
+  Given tree:
+               a
+            /     \
+           b       c
+         /  \     /  \
+        d    e    f    g
+       / \  / \  / \  / \
+       h  i j  k l  m  n  o
+
+  Modified tree:
+               a
+            /     \
+           c       b
+         /  \     /  \
+        d    e    f    g
+       / \  / \  / \  / \
+      o  n m  l k  j  i  h
+======================================================================
+Given:
+  - Perfect Binary tree (complete + full(0 or 2 child))
+  - reverse alternate levels
+Solution:
+  - Initialize level index
+  - Initialize queue to keep horisontal level(probably add here level index)
+  - we need to take care about index % 2 !== 0 levels
+  - 2^index[0,1,...] elements on this level
+    0) 1 element
+    I) 2 elements in Queue
+    II) 4 elements in Queue
+    III) 8 elements in Queue
+    ...
+  levelIndex = 0
+  while Q isn't empty:
+    we still has currNode context!
+
+    if levelIndex is odd:
+      nodes = Q.shift 2^levelIndex elements
+      let l = 0
+      let r = node.length
+      while (l<r): swap(nodes, l, r)
+    else
+
+
+
+*/

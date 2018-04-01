@@ -1,4 +1,4 @@
-import { Node } from '../data-structures/tree';
+import { Node } from '../../data-structures/tree';
 import {
   findMinDepth, findMinDepthQ,
   findMaxPath,
